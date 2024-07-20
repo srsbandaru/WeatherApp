@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "weather.apps.WeatherConfig"
+    "weather.apps.WeatherConfig",
+    "django_bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -70,6 +73,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mysite.wsgi.application"
 
+# environment variables
+load_dotenv()
+WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY')
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

@@ -4,8 +4,109 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Weather Application</title>
+        {% load django_bootstrap5 %}
+        {% bootstrap_css %}
     </head>
     <body>
-        <h1>Weather Application</h1>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+            <div class="container-fluid">
+            <a class="navbar-brand" href="/">Weather Application</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+        <div class="container mt-3">
+            <h1>Weather Application</h1>
+            <form class="m-3" method="post" action="">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button class="btn btn-primary"><i class="bi bi-search"></i> Search</button>
+            </form>
+        </div>
+        
+        <div class="container">
+            {% if weather_data|length == 1 %}
+                <div class="alert alert-danger m-3" role="alert">
+                    {{weather_data.error}} 
+                </div>
+            {% elif weather_data|length > 1 %}
+                <!-- Weather Data -->
+                <h1>Weather Data</h1>
+                <p>City : {{weather_data.city_name}}</p>
+                <p>Country : {{weather_data.country_code}}</p>
+                <p>Temperature : {{weather_data.temperature}}</p>
+                <p>Feels Like : {{weather_data.feels_like}}</p>
+                <p>Latitude : {{weather_data.latitude}}</p>
+                <p>Longitude : {{weather_data.longitude}}</p>
+                <p>Pressure : {{weather_data.pressure}}</p>
+                <p>Humidity : {{weather_data.humidity}}</p>
+                <p>Wind Speed : {{weather_data.wind_speed}}</p>
+                <p>Description : {{weather_data.description}}</p>
+                <p><img src="https://openweathermap.org/img/wn/{{weather_data.icon}}@2x.png" alt="{{weather_data.icon}}@2x.png"></p>
+
+                <!-- Default Open Weather Widget -->
+                <h1>Open Weather Widget</h1>
+                <p>
+                    <div id="openweathermap-widget-15"></div>
+                    <script>window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];  window.myWidgetParam.push({id: 15,cityid: '{{weather_data.city_id}}',appid: '{{weather_api_key}}',units: 'metric',containerid: 'openweathermap-widget-15',  });  (function() {var script = document.createElement('script');script.async = true;script.charset = "utf-8";script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(script, s);  })();</script>
+                </p>
+                
+                <!-- Custom Weather Widget -->
+                <h1>Custom Weather Widget</h1>
+                <p>
+                    <div class="row d-flex justify-content-center py-5">
+                        <div class="col-md-8 col-lg-6 col-xl-5">
+                      
+                          <div class="card text-body" style=" border-radius: 35px;">
+                            <div class="card-body p-4">
+                      
+                              <div class="d-flex">
+                                <h6 class="flex-grow-1">{{weather_data.city_name}}, {{weather_data.country_code}}</h6>
+                                <h6>Lat: {{weather_data.latitude}}; Lon: {{weather_data.longitude}};</h6>
+                              </div>
+                      
+                              <div class="d-flex flex-column text-center mt-5 mb-4">
+                                <h6 class="display-4 mb-0 font-weight-bold">{{weather_data.temperature}}</h6>
+                                <span class="small" style="color: #868B94">{{weather_data.description}}</span>
+                              </div>
+                      
+                              <div class="d-flex align-items-center">
+                                <div class="flex-grow-1" style="font-size: 1rem;">
+                                  <div>Wind Speed: <span class="ms-1"> {{weather_data.wind_speed}} km/h
+                                    </span>
+                                  </div>
+                                  <div>Humidity: <span class="ms-1"> {{weather_data.humidity}}%
+                                    </span></div>
+                                  <div>Pressure: <span class="ms-1"> {{weather_data.pressure}}h
+                                    </span></div>
+                                </div>
+                                <div>
+                                  <img src="https://openweathermap.org/img/wn/{{weather_data.icon}}@2x.png"
+                                    width="100px">
+                                </div>
+                              </div>
+                      
+                            </div>
+                          </div>
+                      
+                        </div>
+                      </div>
+                </p>
+                
+            {% else %}
+                <div class="alert alert-info m-3" role="alert">
+                    Please enter the city name and then click on search. 
+                </div>
+            {% endif %}
+        </div>
+        {% bootstrap_javascript %}
     </body>
 </html>
